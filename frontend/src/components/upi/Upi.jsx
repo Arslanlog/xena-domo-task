@@ -33,7 +33,7 @@ const Upi = ({ code, amount, upiId,formattedTime }) => {
           <div className="Upi-details">
             <span className='text-value'>{upiId}</span>
             <div className="icon-copy" >
-              <RiFileCopyFill size={20} color='white' onClick={() => copyToClipboard(code)} />
+              <RiFileCopyFill size={20} color='white' onClick={() => copyToClipboard(upiId)} />
             </div>
 
           </div>
