@@ -15,7 +15,8 @@ export const createSettlement = async (req, res, next) => {
             ...req.body,
             status: "SUCCESS",
             refrence_id: "3432",
-            merchant_id: "979c2d0f-6a1c-4ca1-a891-963eb156c32f"
+            // change with your own merchant_id
+            merchant_id: "9322f606-550b-4c22-9263-fdda8e204873"
         });
         res.json({
             message: "Settlement created successfully",

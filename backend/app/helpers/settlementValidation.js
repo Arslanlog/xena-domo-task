@@ -98,5 +98,6 @@ export const getSettlement = () => ([
     .optional()
     .notEmpty()
     .isNumeric()
+    .isInt({ min: 1 })
     .withMessage("Invalid take"),
 ])
