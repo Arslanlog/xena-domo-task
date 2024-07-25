@@ -1,0 +1,91 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["omitApi"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                 Int                  @id @default(autoincrement())
+  email              String               @unique
+  fullName           String
+  userName           String
+  password           String
+  phoneNumber        String
+  order              Order[]
+  bank               BankDetails?
+  transactionSession TransactionSession[]
+}
+
+model TransactionSession {
+  id             Int      @id @default(autoincrement())
+  uuid           String   @unique
+  user           User     @relation(fields: [userId], references: [id])
+  userId         Int
+  expirationDate DateTime
+}
+
+model BankDetails {
+  id            Int    @id @default(autoincrement())
+  bankName      String
+  accountNumber String
+  name          String
+  ifscCode      String
+  code          String
+  upiId         String
+  user          User   @relation(fields: [userId], references: [id])
+  userId        Int    @unique
+}
+
+model Order {
+  id     Int    @id @default(autoincrement())
+  amount Float
+  user   User   @relation(fields: [userId], references: [id])
+  userId Int
+  uuid   String
+}
+
+enum Status {
+  ASSIGNED
+  SUCCESS
+  DROPPED
+}
+
+enum Method {
+  BANK
+  CASH
+  AED
+  CRYPTO
+}
+
+enum Wallet {
+  WALLET1
+  WALLET2
+  WALLET3
+}
+
+model Settlement {
+  id              String   @id @default(uuid())
+  merchant_id     String
+  Merchant        Merchant @relation(fields: [merchant_id], references: [id])
+  status          Status
+  amount          Decimal
+  method          Method
+  acc_name        String?
+  acc_no          String?
+  ifsc            String?
+  refrence_id     String
+  rejected_reason String?
+  wallet          Wallet?
+  wallet_address  String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Merchant {
+  id          String       @id @default(uuid())
+  Settlement  Settlement[]
+}
