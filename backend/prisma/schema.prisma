@@ -1,0 +1,45 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["omitApi"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Status {
+  ASSIGNED
+  SUCCESS
+  DROPPED
+}
+
+enum Method {
+  BANK
+  CASH
+  AED
+  CRYPTO
+}
+
+enum Wallet {
+  WALLET1
+  WALLET2
+  WALLET3
+}
+
+model Settlement {
+  id              String   @id @default(uuid())
+  merchant_id     String
+  status          Status
+  amount          Decimal
+  method          Method
+  acc_name        String?
+  acc_no          String?
+  ifsc            String?
+  refrence_id     String
+  rejected_reason String?
+  wallet          Wallet?
+  wallet_address  String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}

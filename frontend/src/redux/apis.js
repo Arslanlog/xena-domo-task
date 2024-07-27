@@ -1,0 +1,60 @@
+import axios from "axios";
+import Cookies from "js-cookie";
+
+const endPoint = process.env.REACT_APP_API_ENDPOINT;
+const apiConfig = (flag = false) => {
+  if (Cookies.get("accessToken")) {
+    return {
+      headers: {
+        Authorization: `bearer ${Cookies.get("accessToken")}`,
+        "Content-Type": flag ? "multipart/form-data" : "application/json",
+      },
+      method: "PUT,DELETE,POST,GET,OPTION",
+    };
+  }
+  return { withCredentials: false };
+};
+
+export const getApi = (url, params) => {
+  return axios.get(`${endPoint}${url}`, {
+    params: params,
+    ...apiConfig(),
+  });
+};
+
+export const postApi = (url, apiData, flag) => {
+  return axios.post(`${endPoint}${url}`, apiData, apiConfig(flag));
+};
+
+export const putApi = (url, apiData, flag) => {
+  return axios.put(`${endPoint}${url}`, apiData, apiConfig(flag));
+};
+
+export const patchApi = (url, apiData, flag) => {
+  return axios.patch(`${endPoint}${url}`, apiData, apiConfig(flag));
+};
+
+
+export const putApiNoHeader = (url, apiData) => {
+  if (Cookies.get("accessToken")) {
+    return axios.put(`${endPoint}${url}`, apiData, {
+      headers: {
+        Authorization: `bearer ${Cookies.get("accessToken")}`,
+      },
+    });
+  } else {
+    // If there's no access token, return an error response or handle it as needed.
+    return Promise.reject("No access token available");
+  }
+};
+
+export const deleteApi = (url) => {
+  return axios.delete(`${endPoint}${url}`, apiConfig());
+};
+
+export const deleteApiWithData = (url, apiData) => {
+  return axios.delete(`${endPoint}${url}`, {
+    data: apiData,
+    ...apiConfig(),
+  });
+};
